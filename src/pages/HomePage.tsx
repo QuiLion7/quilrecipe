@@ -1,7 +1,36 @@
 import { Search } from "lucide-react";
 import RecipeCard from "../components/RecipeCard";
+import { useEffect, useState } from "react";
+
+const ApiId = import.meta.env.VITE_SOME_API_ID;
+const ApiKey = import.meta.env.VITE_SOME_API_KEY;
 
 function HomePage() {
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRecipes = async (searchQuery: string) => {
+    setLoading(true);
+    setRecipes([]);
+
+    try {
+      const res = await fetch(
+        `https://api.edamam.com/api/recipes/v2?type=public&q=${searchQuery}&app_id=${ApiId}&app_key=${ApiKey}`
+      );
+
+      const data = await res.json();
+      setRecipes(data.hits);
+      console.log(data.hits);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchRecipes("chicken");
+  }, []);
+
   return (
     <div className="bg-slate-100 p-10 flex-1">
       <div className="max-w-screen-lg mx-auto">
@@ -24,7 +53,24 @@ function HomePage() {
         </p>
 
         <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <RecipeCard />
+          {!loading &&
+            recipes.map(({ recipe }, index) => (
+              <RecipeCard key={index} recipe={recipe} />
+            ))}
+
+          {loading &&
+            [...Array(9)].map((_, index) => (
+              <div key={index} className="flex w-52 flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
+                  <div className="flex flex-col gap-4">
+                    <div className="skeleton h-4 w-20"></div>
+                    <div className="skeleton h-4 w-28"></div>
+                  </div>
+                </div>
+                <div className="skeleton h-32 w-full"></div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
