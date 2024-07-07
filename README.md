@@ -2,9 +2,9 @@
 
 QuiL Recipe é uma aplicação web que permite localizar e gerenciar receitas de forma fácil e rápida. Desenvolvido para testar o consumo de uma API com React, este projeto utiliza tecnologias como Axios e React Query para otimizar a busca e o armazenamento de receitas favoritas.
 
-![Print versão desktop](/public/banner-desktop.png)
-![Print versão tablet](/public/banner-tablet.png)
-![Print versão mobile](/public/banner-mobile.png)
+![Print versão desktop](https://raw.githubusercontent.com/QuiLion7/quilrecipe/f0330f67ed8e5009a344d61f77a5819abdb0668c/public/banner-desktop.png)
+![Print versão tablet](https://raw.githubusercontent.com/QuiLion7/quilrecipe/f0330f67ed8e5009a344d61f77a5819abdb0668c/public/banner-tablet.png)
+![Print versão mobile](https://raw.githubusercontent.com/QuiLion7/quilrecipe/f0330f67ed8e5009a344d61f77a5819abdb0668c/public/banner-mobile.png)
 
 ## Funcionalidades
 
