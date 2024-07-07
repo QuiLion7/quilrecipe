@@ -37,7 +37,6 @@ function HomePage() {
         `https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=${ApiId}&app_key=${ApiKey}`
       );
 
-      console.log(response?.data.hits);
       return response?.data.hits;
     } catch (error) {
       console.error("Erro ao buscar receitas:", error);
