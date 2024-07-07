@@ -1,47 +1,83 @@
-import { Search } from "lucide-react";
+import { RefreshCcw, Search } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
-import { useEffect, useState } from "react";
+import { getRandomColor } from "../lib/utils";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+interface Recipe {
+  label: string;
+  image: string;
+  source: string;
+  url: string;
+  ingredients: Array<{ text: string }>;
+  calories: number;
+  cuisineType: string[];
+  dietLabels: string[];
+  dishType: string[];
+  healthLabels: string[];
+  mealType: string[];
+  totalTime: number;
+  yield: number;
+}
+interface RecipeHit {
+  recipe: Recipe;
+}
 
 const ApiId = import.meta.env.VITE_SOME_API_ID;
 const ApiKey = import.meta.env.VITE_SOME_API_KEY;
 
 function HomePage() {
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("q");
+  const navigate = useNavigate();
 
-  const fetchRecipes = async (searchQuery: string) => {
-    setLoading(true);
-    setRecipes([]);
-
+  const fetchRecipes = async (): Promise<RecipeHit[]> => {
     try {
-      const res = await fetch(
-        `https://api.edamam.com/api/recipes/v2?type=public&q=${searchQuery}&app_id=${ApiId}&app_key=${ApiKey}`
+      const response = await axios.get(
+        `https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=${ApiId}&app_key=${ApiKey}`
       );
 
-      const data = await res.json();
-      setRecipes(data.hits);
-      console.log(data.hits);
+      console.log(response?.data.hits);
+      return response?.data.hits;
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      console.error("Erro ao buscar receitas:", error);
+      throw error;
     }
   };
-  useEffect(() => {
-    fetchRecipes("chicken");
-  }, []);
+
+  const { isPending, error, data } = useQuery<RecipeHit[]>({
+    queryKey: ["recipes", search],
+    queryFn: fetchRecipes,
+    refetchOnWindowFocus: false,
+    enabled: !!search,
+  });
+
+  const handleSearchRecipe = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const input = form.elements[0] as HTMLInputElement;
+    setSearch(input.value);
+    input.value = "";
+  };
+
+  const handleRefresh = () => {
+    navigate(0);
+  };
 
   return (
-    <div className="bg-slate-100 p-10 flex-1">
+    <div className="bg-slate-100 p-10 flex-1 ">
       <div className="max-w-screen-lg mx-auto">
-        <form>
-          <label className="input shadow-md flex items-center gap-2">
+        <form onSubmit={handleSearchRecipe}>
+          <label className="input shadow-md w-full flex items-center gap-2">
             <Search size={24} />
             <input
               type="text"
               className="text-sm md:text-md grow"
               placeholder="O que você quer cozinhar hoje?"
             />
+            <button onClick={handleRefresh}>
+              <RefreshCcw size={22} />
+            </button>
           </label>
         </form>
 
@@ -53,12 +89,13 @@ function HomePage() {
         </p>
 
         <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {!loading &&
-            recipes.map(({ recipe }, index) => (
-              <RecipeCard key={index} recipe={recipe} />
-            ))}
+          {error && (
+            <div className="">
+              Ocorreu um erro: " {+error}. Tente mais tarde!
+            </div>
+          )}
 
-          {loading &&
+          {isPending &&
             [...Array(9)].map((_, index) => (
               <div key={index} className="flex w-52 flex-col gap-4">
                 <div className="flex items-center gap-4">
@@ -70,6 +107,11 @@ function HomePage() {
                 </div>
                 <div className="skeleton h-32 w-full"></div>
               </div>
+            ))}
+
+          {!isPending &&
+            data?.map(({ recipe }, index) => (
+              <RecipeCard key={index} recipe={recipe} {...getRandomColor()} />
             ))}
         </div>
       </div>
