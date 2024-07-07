@@ -5,17 +5,17 @@ const DesktopSidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="p-3 md:p-10 border-r min-h-screen w-24 md:w-56 hidden sm:block">
-      <div className="flex flex-col gap-20 sticky top-10 left-0">
-        <div className="w-full flex justify-center items-center md:justify-start">
-          <img src="/logo.png" alt="logo" className="w-14 md:w-28" />
+    <div className="p-3 md:p-6 border-r min-h-screen w-24 md:w-48 hidden sm:block z-20">
+      <div className="flex flex-col gap-10 sticky top-10 left-0">
+        <div className="w-full flex justify-center items-center">
+          <img src="/logo.png" alt="logo" className="w-14 md:w-32" />
         </div>
         <ul className="flex flex-col items-center md:items-start gap-4">
           <Link
             to={"/"}
-            className={`flex gap-1 p-2 rounded-md w-full ${
+            className={`flex justify-center md:justify-start gap-2 p-2 rounded-md w-full hover:bg-[#fd9d27] transition-all duration-300] ${
               location.pathname === "/"
-                ? "bg-[#4ed4f6] text-white font-extrabold"
+                ? "bg-[#1fa5c0] text-white font-extrabold"
                 : ""
             }`}
           >
@@ -24,9 +24,9 @@ const DesktopSidebar = () => {
           </Link>
           <Link
             to={"/favorites"}
-            className={`flex gap-1 p-2 rounded-md w-full ${
+            className={`flex justify-center md:justify-start gap-2 p-2 rounded-md w-full hover:bg-[#fd9d27] transition-all duration-300]  ${
               location.pathname === "/favorites"
-                ? "bg-[#4ed4f6] text-white font-extrabold"
+                ? "bg-[#1fa5c0] text-white font-extrabold"
                 : ""
             }`}
           >
