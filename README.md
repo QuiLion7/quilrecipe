@@ -1,30 +1,74 @@
-# React + TypeScript + Vite
+# QuiL Recipe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+QuiL Recipe é uma aplicação web que permite localizar e gerenciar receitas de forma fácil e rápida. Desenvolvido para testar o consumo de uma API com React, este projeto utiliza tecnologias como Axios e React Query para otimizar a busca e o armazenamento de receitas favoritas.
 
-Currently, two official plugins are available:
+![Print versão desktop](/public/banner-desktop.png)
+![Print versão tablet](/public/banner-tablet.png)
+![Print versão mobile](/public/banner-mobile.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funcionalidades
 
-## Expanding the ESLint configuration
+- **Busca de Receitas:** Permite buscar receitas por meio de uma palavra-chave.
+- **Visualização de Receitas:** Exibe detalhes completos das receitas, incluindo ingredientes e tempo de preparo.
+- **Favoritos:** Adiciona e remove receitas dos favoritos, armazenando-as localmente.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Stack utilizada
 
-- Configure the top-level `parserOptions` property like this:
+**Front-end:** Vite, React, TypeScript, TailwindCSS, React Router, Axios, React Query, DaisyUI,
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Aprendizados
+
+Neste projeto, adquiri habilidades significativas ao explorar novas tecnologias. Tive meu primeiro contato com o DaisyUI para estilização, e com React Query para gerenciamento avançado de estados e requisições à API. Além disso, utilizei o Axios para realizar requisições HTTP de maneira eficaz e segura. Essas ferramentas enriqueceram minha experiência no desenvolvimento com React e Vite, especialmente no contexto de integração com APIs externas.
+
+## Uso/Exemplos
+
+```javascript
+
+const fetchRecipes = async (): Promise<RecipeHit[]> => {
+    try {
+      const response = await axios.get(
+        `url`
+      );
+
+      return response?.data.hits;
+    } catch (error) {
+      console.error("Erro ao buscar receitas:", error);
+      throw error;
+    }
+  };
+
+  const { isPending, error, data } = useQuery<RecipeHit[]>({
+    queryKey: ["recipes", search],
+    queryFn: fetchRecipes,
+    refetchOnWindowFocus: false,
+    enabled: !!search,
+  });
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Contribuindo
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+
+- Faça um `fork` do projeto.
+- Crie uma `nova branch`.
+- Faça `commit` das suas alterações.
+- Faça `push` para a branch.
+- Abra um `pull request`.
+
+Veja `contribuindo.md` para saber como começar.
+
+## Variáveis de Ambiente
+
+Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
+
+`VITE_SOME_API_ID`
+
+`VITE_SOME_API_KEY`
+
+## Autores
+
+- [@QuiLion7](https://www.github.com/QuiLion7)
+
+## Licença
+
+[MIT](https://choosealicense.com/licenses/mit/)
